@@ -171,3 +171,90 @@ int main() {
 ------
 
 ## **5. STL 适配器（Adapter）**
+
+**简单理解**：适配器就是**“改装”STL组件**，让它们更适合某些场景的工具。
+
+**STL 适配器的作用**：
+
+- **改变容器行为**（如 `stack`、`queue`）。
+- **修改函数行为**（如 `not1` 取反）。
+- **让普通函数变成 STL 能用的函数**（如 `ptr_fun`）。
+
+### **（1）容器适配器**
+
+- `stack`（栈）：先进后出（LIFO）
+- `queue`（队列）：先进先出（FIFO）
+- `priority_queue`（优先队列）：自动排序。
+
+**示例：使用 `stack`**
+
+```cpp
+#include <iostream>
+#include <stack>
+
+int main() {
+    std::stack<int> s;
+    s.push(10);
+    s.push(20);
+    s.push(30);
+
+    std::cout << "Top: " << s.top() << std::endl;
+    s.pop();
+    std::cout << "Top after pop: " << s.top() << std::endl;
+
+    return 0;
+}
+```
+
+### **（2）仿函数适配器**
+
+STL 内建仿函数：
+
+- **算术仿函数**：`plus<int>`、`minus<int>`、`multiplies<int>`
+- **关系仿函数**：`greater<int>`、`less<int>`
+- **逻辑仿函数**：`logical_and<bool>`、`logical_or<bool>`。
+
+**示例：使用 `greater<int>` 排序**
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+
+int main() {
+    std::vector<int> nums = {5, 3, 8, 1, 6};
+    
+    std::sort(nums.begin(), nums.end(), std::greater<int>()); // 降序排序
+
+    for (int num : nums) {
+        std::cout << num << " ";
+    }
+    return 0;
+}
+```
+
+------
+
+
+
+### 6. **仿函数（Function Object）**
+
+**简单理解**：仿函数就是**“像函数一样使用的对象”**。它本质上是一个**重载了 `operator()` 的类**，可以像普通函数一样被调用。
+
+**为什么要用仿函数？**
+
+- 普通函数是固定的，仿函数可以**存储状态**。
+- 结合 STL **算法（如 `sort`）** 进行灵活的定制。
+
+
+
+### **7. 空间配置器（Allocator）**
+
+**简单理解**：STL 容器默认使用 **`std::allocator<T>`** 来**管理内存分配和释放**。
+
+**为什么需要空间配置器？**
+
+- `new`/`delete` 申请释放内存会调用系统 API，效率较低。
+- 空间配置器**预分配**一块大内存，按需管理，减少 `malloc/free` 开销，提高性能。
+
