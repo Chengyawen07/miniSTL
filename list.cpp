@@ -1,4 +1,11 @@
+// #pragma once
+
 #include <iostream>
+#include <stdexcept>  // 提供异常处理支持 
+#include <sstream> // 提供 std::istringstream 进行字符串解析
+#include <vector>
+#include <string>
+
 using namespace std;
 
 class List{
@@ -118,6 +125,15 @@ public:
         cout << endl;
     }
 
+    // 改进的print
+    void printElements() const {
+        for (Node* current = head; current; current = current->next) {
+            cout << current->data << " ";
+        }
+        cout << endl;
+    }
+
+
 
     // 7. remove(val) 链表的指定删除操作
     void remove(int value) {
@@ -151,37 +167,55 @@ public:
         
     }
 
+    bool empty() const {
+        return size==0;
+    }
+
+    size_t getSize(){
+        return size;
+    }
 
 
 };
 
-
 int main() {
     List myList;
+    int N;
+    cin >> N;
+    getchar();
+    string line;
 
-    myList.push_back(10);
-    myList.push_back(20);
-    myList.push_back(30);
-    myList.push_back(40);
-    
-    cout << "Original List: ";
-    myList.print();  // 输出：10 20 30 40
+    for (int i = 0; i < N; i++) {
+        getline(cin, line);
+        istringstream iss(line);
+        string command;
+        iss >> command;
+        int value;
 
-    myList.remove(20);
-    cout << "After removing 20: ";
-    myList.print();  // 输出：10 30 40
-
-    myList.remove(10);
-    cout << "After removing 10 (head): ";
-    myList.print();  // 输出：30 40
-
-    myList.remove(40);
-    cout << "After removing 40 (tail): ";
-    myList.print();  // 输出：30
-
-    myList.remove(100);
-    cout << "After trying to remove 100 (not in list): ";
-    myList.print();  // 输出：30（无变化）
-
+        if (command == "push_back") {
+            iss >> value; // 它的作用类似于 cin >> value, 将输入存入Value
+            myList.push_back(value);
+        } else if (command == "push_front") {
+            iss >> value;
+            myList.push_front(value);
+        } else if (command == "pop_back") {
+            myList.pop_back();
+        } else if (command == "pop_front") {
+            myList.pop_front();
+        } else if (command == "remove") {
+            iss >> value;
+            myList.remove(value);
+        } else if (command == "clear") {
+            myList.clear();
+        } else if (command == "size") {
+            cout << myList.getSize() << endl;
+        } else if (command == "print") {
+            if (myList.empty()) {
+                cout << "empty" << endl;
+            } else {
+                myList.printElements();
+            }
+        }
+    }
     return 0;
 }
